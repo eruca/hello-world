@@ -1,13 +1,27 @@
 package main
 
-import "github.com/gin-gonic/gin"
+import (
+	"encoding/xml"
+
+	"github.com/gin-gonic/gin"
+)
 
 func main() {
 	router := gin.Default()
-	router.GET("/", func(c *gin.Context) {
-		c.JSON(200, gin.H{
-			"message": "Hello, world",
-		})
-	})
+	router.GET("/:name", IndexHandler)
 	router.Run()
+}
+
+func IndexHandler(c *gin.Context) {
+	name := c.Params.ByName("name")
+
+	c.JSON(200, gin.H{
+		"message": "Hello " + name,
+	})
+}
+
+type Person struct {
+	XMLName   xml.Name `xml:"person"`
+	FirstName string   `xml:"first_name"`
+	LastName  string   `xml:"last_name"`
 }
